@@ -52,8 +52,6 @@ export default function App({Component, pageProps}) {
         // {name: 'Configurações', href: '#', icon: CogIcon, current: isCurrentRoute('config'), title: 'Configurações'},
     ]
 
-    const currentRoute = navigation.filter(nav => nav.current)[0]
-
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     return (
