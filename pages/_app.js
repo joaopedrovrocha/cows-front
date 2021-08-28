@@ -49,7 +49,6 @@ export default function App({Component, pageProps}) {
             current: isCurrentRoute('cow'),
             title: 'Vacas'
         },
-        // {name: 'Configurações', href: '#', icon: CogIcon, current: isCurrentRoute('config'), title: 'Configurações'},
     ]
 
     const [sidebarOpen, setSidebarOpen] = useState(false)
