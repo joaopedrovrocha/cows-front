@@ -49,7 +49,7 @@ export default function App({Component, pageProps}) {
             current: isCurrentRoute('cow'),
             title: 'Vacas'
         },
-        {name: 'Configurações', href: '#', icon: CogIcon, current: isCurrentRoute('config'), title: 'Configurações'},
+        // {name: 'Configurações', href: '#', icon: CogIcon, current: isCurrentRoute('config'), title: 'Configurações'},
     ]
 
     const currentRoute = navigation.filter(nav => nav.current)[0]
