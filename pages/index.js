@@ -30,7 +30,8 @@ export default function Home() {
                     </dl>
                 </div>
             )}
-            <h2>Nenhum proprietário cadastrado.</h2>
+
+            {!owners && (<h2>Nenhum proprietário cadastrado.</h2>)}
         </Page>
     )
 }
