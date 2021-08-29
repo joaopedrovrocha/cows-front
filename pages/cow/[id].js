@@ -6,21 +6,23 @@ import InputMask from "react-input-mask"
 
 import Page from '../../components/page'
 import Notify from '../../components/notify'
+import Loading from '../../components/loading'
 
 import { parseBirthMonthToDatabase, parseBirthMonthToView } from '../../helpers/cow.helper'
 
-import { OWNERS, COWS } from '../../lib/mock'
+import {useGetCow} from "../../hooks/useCow";
+import {useGetOwners} from "../../hooks/useOwner";
 
 export default function New() {
 
     const notifyRef = useRef()
 
-    const [loading, setLoading] = useState(false)
-
     const router = useRouter()
 
     const { id } = router.query
-    const cow = COWS[0]
+
+    const { data: cow, isLoadingCow } = useGetCow(id)
+    const { data: owners, isLoading: isLoadingOwners } = useGetOwners()
 
     const validationSchema = Yup.object().shape({
         gender: Yup.string().required('Required'),
@@ -28,14 +30,12 @@ export default function New() {
     })
 
     const {handleChange, handleSubmit, errors} = useFormik({
+        enableReinitialize: true,
         initialValues: {
             ...cow,
-            birthMonth: parseBirthMonthToView(cow.birthMonth),
-            ownerId: cow.ownerId
+            birthMonth: parseBirthMonthToView(cow ? cow.birthMonth : '')
         },
         onSubmit: async (values) => {
-            setLoading(true)
-
             if (!/^\d{2}\/\d{4}$/.test(values.birthMonth)) {
                 return console.error('invalid date', values.birthMonth)
             }
@@ -51,6 +51,10 @@ export default function New() {
         },
         validationSchema,
     })
+
+    if (isLoadingCow || isLoadingOwners) {
+        return <Loading />
+    }
 
     return (
         <Page title="Editar Vaca">
@@ -72,9 +76,9 @@ export default function New() {
                                         className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         onChange={handleChange}
                                         aria-invalid={!!errors.ownerId}
-                                        defaultValue={cow.owner.id}
+                                        defaultValue={cow.ownerId}
                                     >
-                                        {OWNERS.map(owner => (
+                                        {owners.map(owner => (
                                             <option key={owner.id} value={owner.id}>{owner.name}</option>
                                         ))}
                                     </select>

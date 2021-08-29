@@ -5,8 +5,11 @@ import { useRouter } from "next/router"
 
 import Page from '../../components/page'
 import Notify from '../../components/notify'
+import Loading from "../../components/loading"
 
-import { OWNERS } from '../../lib/mock'
+import service from '../../lib/service'
+
+import { useGetOwner } from "../../hooks/useOwner"
 
 export default function New() {
 
@@ -15,9 +18,9 @@ export default function New() {
     const [loading, setLoading] = useState(false)
 
     const router = useRouter()
-
     const { id } = router.query
-    const owner = OWNERS[0]
+
+    const { data: owner, isLoading, error } = useGetOwner(id)
 
     const validationSchema = Yup.object().shape({
         name: Yup.string()
@@ -25,6 +28,7 @@ export default function New() {
     })
 
     const {handleChange, handleSubmit, errors} = useFormik({
+        enableReinitialize: true,
         initialValues: { ...owner },
         onSubmit: async (values) => {
             setLoading(true)
@@ -35,6 +39,10 @@ export default function New() {
         },
         validationSchema,
     })
+
+    if (isLoading) {
+        return <Loading />
+    }
 
     return (
         <Page title="Editar Proprietário">

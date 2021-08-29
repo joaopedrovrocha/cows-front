@@ -6,11 +6,11 @@ import { useRouter } from "next/router"
 import Page from '../../components/page'
 import Notify from '../../components/notify'
 
+import service from '../../lib/service'
+
 export default function New() {
 
     const notifyRef = useRef()
-
-    const [loading, setLoading] = useState(false)
 
     const router = useRouter()
 
@@ -24,11 +24,15 @@ export default function New() {
             name: ''
         },
         onSubmit: async (values) => {
-            setLoading(true)
+            service
+                .post('/owners', values)
+                .then(response => {
+                    notifyRef.current.handleShow()
 
-            console.log('values', values)
-
-            notifyRef.current.handleShow()
+                    setTimeout(() => {
+                        router.push('/owner')
+                    }, 2500)
+                })
         },
         validationSchema,
     })

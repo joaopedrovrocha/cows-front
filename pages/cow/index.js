@@ -1,17 +1,16 @@
 import { useRouter } from "next/router"
 
-import { TagIcon } from '@heroicons/react/solid'
+import {PencilIcon, TagIcon} from '@heroicons/react/solid'
 
 import Page from '../../components/page'
+import { useGetCows } from '../../hooks/useCow'
 
 import { getBirthMonth, getAge, getGender } from '../../helpers/cow.helper'
 
-import { COWS } from '../../lib/mock'
-
 export default function Index() {
-    const cows = COWS
-
     const router = useRouter()
+
+    const { data: cows, isLoading, error } = useGetCows()
 
     return (
         <Page title="Vacas">
@@ -52,7 +51,13 @@ export default function Index() {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {cows.map((cow, cowIdx) => (
+                                {isLoading && (
+                                    <tr className={'bg-white'}>
+                                        <td colSpan={5} className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">Carregando..</td>
+                                    </tr>
+                                )}
+
+                                {!isLoading && !error && cows.map((cow, cowIdx) => (
                                     <tr key={cow.id} className={cowIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ cow.owner.name }</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ getGender(cow.gender) }</td>
@@ -63,7 +68,7 @@ export default function Index() {
                                                 href="#"
                                                 className="text-indigo-600 hover:text-indigo-900"
                                                 onClick={() => router.push(`/cow/${cow.id}`) }
-                                            > Editar </a>
+                                            > <PencilIcon className="inline-block h-5 w-5" aria-hidden="true" /> </a>
                                         </td>
                                     </tr>
                                 ))}

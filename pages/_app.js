@@ -8,7 +8,6 @@ import {
     MenuAlt2Icon,
     UserGroupIcon,
     XIcon,
-    CogIcon,
 } from '@heroicons/react/outline'
 
 import {useRouter} from "next/router"
@@ -206,10 +205,9 @@ export default function App({Component, pageProps}) {
                                             <Menu.Button
                                                 className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                 <span className="sr-only">Open user menu</span>
-                                                <span
-                                                    className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-gray-500">
-                              <span className="font-medium leading-none text-white">JR</span>
-                            </span>
+                                                <span className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-gray-500">
+                                                    <span className="font-medium leading-none text-white">JR</span>
+                                                </span>
                                             </Menu.Button>
                                         </div>
                                         <Transition

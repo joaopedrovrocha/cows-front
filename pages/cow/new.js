@@ -6,18 +6,21 @@ import InputMask from 'react-input-mask'
 
 import Page from '../../components/page'
 import Notify from '../../components/notify'
+import Loading from "../../components/loading"
 
 import { parseBirthMonthToDatabase } from '../../helpers/cow.helper'
 
-import { OWNERS } from '../../lib/mock'
+import { useGetOwners } from '../../hooks/useOwner'
+
+import service from '../../lib/service'
 
 export default function New() {
 
     const notifyRef = useRef()
 
-    const [loading, setLoading] = useState(false)
-
     const router = useRouter()
+
+    const { data: owners, isLoading, error } = useGetOwners()
 
     const validationSchema = Yup.object().shape({
         gender: Yup.string().required('Required'),
@@ -25,26 +28,35 @@ export default function New() {
     })
 
     const {handleChange, handleSubmit, errors, values} = useFormik({
+        enableReinitialize: true,
         initialValues: {
             gender: 'female',
             birthMonth: '',
-            ownerId: null
+            ownerId: owners ? owners[0].id : null
         },
         onSubmit: async (values) => {
-            setLoading(true)
-
             if (!/^\d{2}\/\d{4}$/.test(values.birthMonth)) {
                 return console.error('invalid date', values.birthMonth)
             }
 
             values.birthMonth = parseBirthMonthToDatabase(values.birthMonth)
 
-            console.log('values', values)
+            service
+                .post('/cows', values)
+                .then(response => {
+                    notifyRef.current.handleShow()
 
-            notifyRef.current.handleShow()
+                    setTimeout(() => {
+                        router.push('/cow')
+                    }, 2500)
+                })
         },
         validationSchema,
     })
+
+    if (isLoading) {
+        return <Loading />
+    }
 
     return (
         <Page title="Nova Vaca">
@@ -67,7 +79,7 @@ export default function New() {
                                         onChange={handleChange}
                                         aria-invalid={!!errors.ownerId}
                                     >
-                                        {OWNERS.map(owner => (
+                                        {owners.map(owner => (
                                             <option key={owner.id} value={owner.id}>{owner.name}</option>
                                         ))}
                                     </select>

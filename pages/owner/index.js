@@ -1,15 +1,13 @@
 import { useRouter } from "next/router"
-
-import { UserIcon } from '@heroicons/react/solid'
+import { UserIcon, PencilIcon } from '@heroicons/react/solid'
 
 import Page from '../../components/page'
-
-import { OWNERS } from '../../lib/mock'
+import { useGetOwners } from '../../hooks/useOwner'
 
 export default function Index() {
-    const owners = OWNERS
-
     const router = useRouter()
+
+    const { data: owners, isLoading, error } = useGetOwners()
 
     return (
         <Page title="Proprietários">
@@ -44,15 +42,20 @@ export default function Index() {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {owners.map((owner, ownerIdx) => (
+                                {isLoading && (
+                                    <tr className={'bg-white'}>
+                                        <td colSpan={2} className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">Carregando..</td>
+                                    </tr>
+                                )}
+
+                                {!isLoading && !error && owners.map((owner, ownerIdx) => (
                                     <tr key={owner.id} className={ownerIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{owner.name}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a
-                                                href="#"
+                                                href={`/owner/${owner.id}`}
                                                 className="text-indigo-600 hover:text-indigo-900"
-                                                onClick={() => router.push(`/owner/${owner.id}`) }
-                                            > Editar </a>
+                                            > <PencilIcon className="inline-block h-5 w-5" aria-hidden="true" /> </a>
                                         </td>
                                     </tr>
                                 ))}

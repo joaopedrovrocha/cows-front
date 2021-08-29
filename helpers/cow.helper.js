@@ -1,18 +1,34 @@
 import moment from "../lib/moment"
 
 export function getBirthMonth(birthMonth) {
+    if (!birthMonth) {
+        return ''
+    }
+
     return moment(birthMonth, 'YYYY-MM').format('MM/YYYY')
 }
 
 export function getAge(birthMonth) {
+    if (!birthMonth) {
+        return ''
+    }
+
     return moment(birthMonth, 'YYYY-MM').fromNow(true)
 }
 
 export function parseBirthMonthToDatabase(birthMonth) {
+    if (!birthMonth) {
+        return ''
+    }
+
     return birthMonth.split('/').reverse().join('-')
 }
 
 export function parseBirthMonthToView(birthMonth) {
+    if (!birthMonth) {
+        return ''
+    }
+
     return birthMonth.split('-').reverse().join('/')
 }
 
