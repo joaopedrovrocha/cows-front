@@ -29,11 +29,11 @@ export default function New() {
         birthMonth: Yup.string().required('Required')
     })
 
-    const {handleChange, handleSubmit, errors} = useFormik({
+    const {handleChange, handleSubmit, errors, values} = useFormik({
         enableReinitialize: true,
         initialValues: {
             ...cow,
-            birthMonth: parseBirthMonthToView(cow ? cow.birthMonth : '')
+            birthMonth: parseBirthMonthToView(cow.birthMonth)
         },
         onSubmit: async (values) => {
             if (!/^\d{2}\/\d{4}$/.test(values.birthMonth)) {
@@ -57,7 +57,7 @@ export default function New() {
     }
 
     return (
-        <Page title="Editar Vaca">
+        <Page title="Editar dados da Vaca">
             <div>
                 <form className="space-y-8 divide-y divide-gray-200">
                     <div className="space-y-8 divide-y divide-gray-200">
@@ -76,7 +76,7 @@ export default function New() {
                                         className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         onChange={handleChange}
                                         aria-invalid={!!errors.ownerId}
-                                        defaultValue={cow.ownerId}
+                                        value={values.ownerId}
                                     >
                                         {owners.map(owner => (
                                             <option key={owner.id} value={owner.id}>{owner.name}</option>
@@ -94,7 +94,7 @@ export default function New() {
                                         className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         onChange={handleChange}
                                         aria-invalid={!!errors.gender}
-                                        defaultValue={cow.gender}
+                                        value={values.gender}
                                     >
                                         <option value={'female'}>Feminino</option>
                                         <option value={'male'}>Masculino</option>
@@ -104,7 +104,11 @@ export default function New() {
                                 <div className="sm:col-span-3">
                                     <label htmlFor="birthMonth" className="block text-sm font-medium text-gray-700"> Mês de Nascimento </label>
                                     <div className="mt-1">
-                                        <InputMask mask="99/9999" onChange={handleChange} defaultValue={parseBirthMonthToView(cow.birthMonth)}>
+                                        <InputMask
+                                            mask="99/9999"
+                                            onChange={handleChange}
+                                            value={values.birthMonth}
+                                        >
                                             {(inputProps) => (
                                                 <input
                                                     type="text"
@@ -114,7 +118,7 @@ export default function New() {
                                                     {...inputProps}
                                                     onChange={handleChange}
                                                     aria-invalid={!!errors.birthMonth}
-                                                    defaultValue={parseBirthMonthToView(cow.birthMonth)}
+                                                    value={values.birthMonth}
                                                 />
                                             )}
                                         </InputMask>

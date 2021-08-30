@@ -65,9 +65,8 @@ export default function Index() {
                                         <td className="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ getAge(cow.birthMonth) }</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a
-                                                href="#"
+                                                href={`/cow/${cow.id}`}
                                                 className="text-indigo-600 hover:text-indigo-900"
-                                                onClick={() => router.push(`/cow/${cow.id}`) }
                                             > <PencilIcon className="inline-block h-5 w-5" aria-hidden="true" /> </a>
                                         </td>
                                     </tr>

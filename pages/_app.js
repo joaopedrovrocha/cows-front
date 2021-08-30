@@ -11,6 +11,9 @@ import {
 } from '@heroicons/react/outline'
 
 import {useRouter} from "next/router"
+import { SWRConfig } from 'swr'
+
+import service from '../lib/service'
 
 const userNavigation = [
     {name: 'Sair', href: '#'},
@@ -248,7 +251,9 @@ export default function App({Component, pageProps}) {
                     </div>
                 </div>
 
-                <Component {...pageProps} />
+                <SWRConfig value={{ fetcher: (url) => service(url).then(r => r.data) }}>
+                    <Component {...pageProps} />
+                </SWRConfig>
             </div>
         </div>
     )

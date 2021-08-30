@@ -1,24 +1,22 @@
 import useSWR from 'swr'
 
-const fetcher = url => fetch(url).then(res => res.json())
-const { API_URL } = process.env
-const baseURL = `${API_URL}/owners`
+const baseURL = `/owners`
 
 export const useGetOwners = () => {
-    const { data, error } = useSWR(baseURL, fetcher)
+    const { data, error } = useSWR(baseURL)
 
     return {
-        data: data ? data.data : null,
+        data: data ? data.data : [],
         isLoading: !error && !data,
         error
     }
 }
 
 export const useGetOwner = id => {
-    const { data, error } = useSWR(`${baseURL}/${id}`, fetcher)
+    const { data, error } = useSWR(`${baseURL}/${id}`)
 
     return {
-        data: data ? data.data : null,
+        data: data ? data.data : {},
         isLoading: !error && !data,
         error
     }
