@@ -32,7 +32,7 @@ export default function New() {
         initialValues: {
             gender: 'female',
             birthMonth: '',
-            ownerId: owners ? owners[0].id : null
+            ownerId: owners ? owners[0]?.id : null
         },
         onSubmit: async (values) => {
             if (!/^\d{2}\/\d{4}$/.test(values.birthMonth)) {
