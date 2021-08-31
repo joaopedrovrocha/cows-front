@@ -34,7 +34,7 @@ export default function Index() {
                                         scope="col"
                                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                     >
-                                        Name
+                                        Nome
                                     </th>
                                     <th scope="col" className="relative px-6 py-3">
                                         <span className="sr-only">Ações</span>
