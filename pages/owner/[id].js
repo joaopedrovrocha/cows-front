@@ -31,11 +31,15 @@ export default function New() {
         enableReinitialize: true,
         initialValues: { ...owner },
         onSubmit: async (values) => {
-            setLoading(true)
+            service
+                .post(`/owners/${id}`, values)
+                .then(response => {
+                    notifyRef.current.handleShow()
 
-            console.log('values', values)
-
-            notifyRef.current.handleShow()
+                    setTimeout(() => {
+                        router.push('/owner')
+                    }, 2500)
+                })
         },
         validationSchema,
     })

@@ -12,6 +12,7 @@ import { parseBirthMonthToDatabase, parseBirthMonthToView } from '../../helpers/
 
 import {useGetCow} from "../../hooks/useCow";
 import {useGetOwners} from "../../hooks/useOwner";
+import service from "../../lib/service";
 
 export default function New() {
 
@@ -40,14 +41,17 @@ export default function New() {
                 return console.error('invalid date', values.birthMonth)
             }
 
-            let valuesSave = {
-                ...values,
-                birthMonth: parseBirthMonthToDatabase(values.birthMonth)
-            }
+            values.birthMonth = parseBirthMonthToDatabase(values.birthMonth)
 
-            console.log('values', valuesSave)
+            service
+                .post(`/cows/${id}`, values)
+                .then(response => {
+                    notifyRef.current.handleShow()
 
-            notifyRef.current.handleShow()
+                    setTimeout(() => {
+                        router.push('/cow')
+                    }, 2500)
+                })
         },
         validationSchema,
     })
