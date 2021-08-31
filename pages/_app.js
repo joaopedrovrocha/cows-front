@@ -107,7 +107,7 @@ export default function App({Component, pageProps}) {
                                 </div>
                             </Transition.Child>
                             <div className="flex-shrink-0 flex items-center justify-center px-4">
-                                <span className="text-white tracking-widest text-2xl">C.O.W.S</span>
+                                <span className="text-white tracking-widest text-2xl">F.A.R.M</span>
                             </div>
                             <div className="mt-5 flex-1 h-0 overflow-y-auto">
                                 <nav className="px-2 space-y-1">
@@ -141,7 +141,7 @@ export default function App({Component, pageProps}) {
                     {/* Sidebar component, swap this element with another sidebar if you like */}
                     <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
                         <div className="flex items-center justify-center flex-shrink-0 px-4">
-                            <span className="text-white tracking-widest text-2xl">C.O.W.S</span>
+                            <span className="text-white tracking-widest text-2xl">F.A.R.M</span>
                         </div>
                         <div className="mt-5 flex-1 flex flex-col">
                             <nav className="flex-1 px-2 space-y-1">
