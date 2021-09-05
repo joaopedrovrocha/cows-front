@@ -34,14 +34,17 @@ export default function Index() {
                                 <thead className="bg-gray-50">
                                 <tr>
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Nome
+                                    </th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Proprietário
                                     </th>
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Gênero
                                     </th>
-                                    <th scope="col" className="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Mês de Nascimento
-                                    </th>
+                                    {/*<th scope="col" className="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">*/}
+                                    {/*    Mês de Nascimento*/}
+                                    {/*</th>*/}
                                     <th scope="col" className="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Idade
                                     </th>
@@ -59,9 +62,10 @@ export default function Index() {
 
                                 {!isLoading && !error && cows.map((cow, cowIdx) => (
                                     <tr key={cow.id} className={cowIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ cow.name }</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ cow.owner.name }</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ getGender(cow.gender) }</td>
-                                        <td className="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ getBirthMonth(cow.birthMonth) }</td>
+                                        {/*<td className="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ getBirthMonth(cow.birthMonth) }</td>*/}
                                         <td className="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ getAge(cow.birthMonth) }</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a
