@@ -44,5 +44,5 @@ export function getGender(gender) {
 export function sumCows(arr) {
     return arr.reduce((acc, el) => {
         return parseInt(acc.quantity || 1) + parseInt(el.quantity || 1)
-    })
+    }, 0)
 }
