@@ -183,7 +183,7 @@ export default function New() {
 
             <Notify
                 title={'Sucesso!'}
-                description={'Proprietário salvo com sucesso!'}
+                description={'Registro salvo com sucesso!'}
                 ref={notifyRef}
             />
         </Page>
