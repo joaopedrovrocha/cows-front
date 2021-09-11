@@ -33,22 +33,25 @@ export default function Index() {
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-50">
                                 <tr>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Nome
+                                    <th width="20%" scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Nome / Lote
                                     </th>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th width="35%" scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Proprietário
                                     </th>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th width="15%" scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Gênero
                                     </th>
                                     {/*<th scope="col" className="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">*/}
                                     {/*    Mês de Nascimento*/}
                                     {/*</th>*/}
-                                    <th scope="col" className="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th width="15%" scope="col" className="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Idade
                                     </th>
-                                    <th scope="col" className="relative px-6 py-3">
+                                    <th width="15%" scope="col" className="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Quantidade
+                                    </th>
+                                    <th width="10%" scope="col" className="relative px-6 py-3">
                                         <span className="sr-only">Ações</span>
                                     </th>
                                 </tr>
@@ -67,6 +70,7 @@ export default function Index() {
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ getGender(cow.gender) }</td>
                                         {/*<td className="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ getBirthMonth(cow.birthMonth) }</td>*/}
                                         <td className="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ getAge(cow.birthMonth) }</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ cow.quantity || 1 }</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a
                                                 href={`/cow/${cow.id}`}

@@ -6,6 +6,8 @@ import Loading from '../components/loading'
 import { useGetCows } from "../hooks/useCow"
 import { useGetOwners } from "../hooks/useOwner"
 
+import { sumCows } from '../helpers/cow.helper'
+
 export default function Home() {
 
     const { data: cows, isLoading: isCowsLoading } = useGetCows()
@@ -24,7 +26,7 @@ export default function Home() {
                         {owners.map((owner) => (
                             <div key={owner.id} className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
                                 <dt className="text-sm font-medium text-gray-500 truncate">{owner.name}</dt>
-                                <dd className="mt-1 text-3xl font-semibold text-gray-900">{cows.filter(el => el.ownerId === owner.id).length}</dd>
+                                <dd className="mt-1 text-3xl font-semibold text-gray-900">{sumCows(cows.filter(el => el.ownerId === owner.id))}</dd>
                             </div>
                         ))}
                     </dl>

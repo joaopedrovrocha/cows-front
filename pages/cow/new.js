@@ -33,7 +33,8 @@ export default function New() {
             gender: 'female',
             birthMonth: '',
             ownerId: owners ? owners[0]?.id : null,
-            name: ''
+            name: '',
+            quantity: 1
         },
         onSubmit: async (values) => {
             if (!/^\d{2}\/\d{4}$/.test(values.birthMonth)) {
@@ -70,7 +71,7 @@ export default function New() {
                             </div>
                             <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                                 <div className="col-span-6 sm:col-span-3">
-                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700"> Nome </label>
+                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700"> Nome / Lote </label>
                                     <div className="mt-1">
                                         <input
                                             type="text"
@@ -101,7 +102,7 @@ export default function New() {
                                     </select>
                                 </div>
 
-                                <div className="col-span-6 sm:col-span-3">
+                                <div className="col-span-4 sm:col-span-3">
                                     <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
                                         Gênero
                                     </label>
@@ -117,7 +118,7 @@ export default function New() {
                                     </select>
                                 </div>
 
-                                <div className="col-span-6 sm:col-span-3">
+                                <div className="col-span-4 sm:col-span-3">
                                     <label htmlFor="birthMonth" className="block text-sm font-medium text-gray-700"> Mês de Nascimento </label>
                                     <div className="mt-1">
                                         <InputMask mask="99/9999" onChange={handleChange}>
@@ -135,6 +136,20 @@ export default function New() {
                                         </InputMask>
                                     </div>
                                 </div>
+
+                                <div className="col-span-4 sm:col-span-3">
+                                    <label htmlFor="quantity" className="block text-sm font-medium text-gray-700"> Quantidade </label>
+                                    <div className="mt-1">
+                                        <input
+                                            type="text"
+                                            name="quantity"
+                                            id="quantity"
+                                            className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                            onChange={handleChange}
+                                            aria-invalid={!!errors.quantity}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -145,7 +160,7 @@ export default function New() {
                                 type="button"
                                 className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 onClick={ () => router.push('/cow') }
-                            > Cancelar </button>
+                            > Voltar </button>
                             <button
                                 type="button"
                                 className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
