@@ -13,6 +13,8 @@ import { useGetOwner } from "../../hooks/useOwner"
 
 export default function New() {
 
+    const [isFormLoading, setIsFormLoading] = useState(false)
+
     const notifyRef = useRef()
 
     const [loading, setLoading] = useState(false)
@@ -31,10 +33,15 @@ export default function New() {
         enableReinitialize: true,
         initialValues: { ...owner },
         onSubmit: async (values) => {
+
+            setIsFormLoading(true)
+
             service
                 .post(`/owners/${id}`, values)
                 .then(response => {
                     notifyRef.current.handleShow()
+
+                    setIsFormLoading(false)
 
                     setTimeout(() => {
                         router.push('/owner')
@@ -78,18 +85,24 @@ export default function New() {
                     </div>
 
                     <div className="pt-5">
-                        <div className="flex justify-end">
-                            <button
-                                type="button"
-                                className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                onClick={ () => router.push('/owner') }
-                            > Voltar </button>
-                            <button
-                                type="button"
-                                className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                onClick={ () => handleSubmit() }
-                            > Salvar </button>
-                        </div>
+                        {isFormLoading && (
+                            <div>Salvando...</div>
+                        )}
+
+                        {!isFormLoading && (
+                            <div className="flex justify-end">
+                                <button
+                                    type="button"
+                                    className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    onClick={ () => router.push('/owner') }
+                                > Voltar </button>
+                                <button
+                                    type="button"
+                                    className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    onClick={ () => handleSubmit() }
+                                > Salvar </button>
+                            </div>
+                        )}
                     </div>
                 </form>
             </div>

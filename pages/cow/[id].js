@@ -16,14 +16,16 @@ import service from "../../lib/service";
 
 export default function New() {
 
+    const [isFormLoading, setIsFormLoading] = useState(false)
+
     const notifyRef = useRef()
 
     const router = useRouter()
 
     const { id } = router.query
 
-    const { data: cow, isLoadingCow } = useGetCow(id)
-    const { data: owners, isLoading: isLoadingOwners } = useGetOwners()
+    const { data: cow, isFormLoadingCow } = useGetCow(id)
+    const { data: owners, isFormLoading: isFormLoadingOwners } = useGetOwners()
 
     const validationSchema = Yup.object().shape({
         gender: Yup.string().required('Required'),
@@ -42,12 +44,18 @@ export default function New() {
                 return console.error('invalid date', values.birthMonth)
             }
 
-            values.birthMonth = parseBirthMonthToDatabase(values.birthMonth)
+            setIsFormLoading(true)
+
+            let data = { ...values }
+
+            data.birthMonth = parseBirthMonthToDatabase(data.birthMonth)
 
             service
-                .post(`/cows/${id}`, values)
+                .post(`/cows/${id}`, data)
                 .then(response => {
                     notifyRef.current.handleShow()
+
+                    setIsFormLoading(false)
 
                     setTimeout(() => {
                         router.push('/cow')
@@ -57,7 +65,7 @@ export default function New() {
         validationSchema,
     })
 
-    if (isLoadingCow || isLoadingOwners) {
+    if (isFormLoadingCow || isFormLoadingOwners) {
         return <Loading />
     }
 
@@ -165,18 +173,24 @@ export default function New() {
                     </div>
 
                     <div className="pt-5">
-                        <div className="flex justify-end">
-                            <button
-                                type="button"
-                                className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                onClick={ () => router.push('/cow') }
-                            > Voltar </button>
-                            <button
-                                type="button"
-                                className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                onClick={ () => handleSubmit() }
-                            > Salvar </button>
-                        </div>
+                        {isFormLoading && (
+                            <div>Salvando...</div>
+                        )}
+
+                        {!isFormLoading && (
+                            <div className="flex justify-end">
+                                <button
+                                    type="button"
+                                    className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    onClick={ () => router.push('/cow') }
+                                > Voltar </button>
+                                <button
+                                    type="button"
+                                    className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    onClick={ () => handleSubmit() }
+                                > Salvar </button>
+                            </div>
+                        )}
                     </div>
                 </form>
             </div>
