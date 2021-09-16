@@ -1,13 +1,80 @@
 import { useRouter } from "next/router"
-import { UserIcon, PencilIcon } from '@heroicons/react/solid'
+import { UserIcon, PencilIcon, TrashIcon } from '@heroicons/react/solid'
 
 import Page from '../../components/page'
 import { useGetOwners } from '../../hooks/useOwner'
+import {useState} from "react";
+
+import service from '../../lib/service'
+import {useSWRConfig} from "swr";
 
 export default function Index() {
     const router = useRouter()
 
+    const [isDeleting, setIsDeleting] = useState(false)
+    const [isDeleteWaiting, setIsDeleteWaiting] = useState(false)
+    const [elementToDelete, setElementToDelete] = useState(null)
+
     const { data: owners, isLoading, error } = useGetOwners()
+
+    const { mutate } = useSWRConfig()
+
+    function removeElement(element) {
+        setElementToDelete(element)
+        setIsDeleting(true)
+    }
+
+    function doRemoveElement() {
+        setIsDeleteWaiting(true)
+
+        service
+            .delete(`/owners/${elementToDelete.id}`)
+            .then(response => {
+                mutate('/owners')
+
+                setIsDeleting(false)
+                setElementToDelete(null)
+                setIsDeleteWaiting(false)
+            })
+    }
+
+    if (isDeleting) {
+        return (
+            <div className="bg-white shadow sm:rounded-lg">
+                <div className="px-4 py-5 sm:p-6">
+                    <h3 className="text-lg leading-6 font-medium text-gray-900">Remover Proprietário ({ elementToDelete.name.toUpperCase() })</h3>
+                    <div className="mt-2 max-w-xl text-sm text-gray-500">
+                        <p>Deseja realmente remover esse proprietário? Essa ação não pode ser desfeita.</p>
+                    </div>
+                    <div className="mt-5">
+                        {isDeleteWaiting && (
+                            <span>Removendo...</span>
+                        )}
+
+                        {!isDeleteWaiting && (
+                            <>
+                                <button
+                                    type="button"
+                                    className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    onClick={() => { setIsDeleting(false) && setElementToDelete(null) }}
+                                >
+                                    Cancelar
+                                </button>
+
+                                <button
+                                    type="button"
+                                    className="ml-3 inline-flex items-center justify-center px-4 py-2 border border-transparent font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm"
+                                    onClick={() => { doRemoveElement() }}
+                                >
+                                    Remover
+                                </button>
+                            </>
+                        )}
+                    </div>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <Page title="Proprietários">
@@ -56,6 +123,11 @@ export default function Index() {
                                                 href={`/owner/${owner.id}`}
                                                 className="text-indigo-600 hover:text-indigo-900"
                                             > <PencilIcon className="inline-block h-5 w-5" aria-hidden="true" /> </a>
+                                            <a
+                                                href="#"
+                                                className="text-indigo-600 hover:text-indigo-900"
+                                                onClick={() => { removeElement(owner) }}
+                                            > <TrashIcon className="inline-block h-5 w-5" aria-hidden="true" /> </a>
                                         </td>
                                     </tr>
                                 ))}
