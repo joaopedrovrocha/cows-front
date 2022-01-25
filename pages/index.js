@@ -24,9 +24,9 @@ export default function Home() {
                     <h3 className="text-lg leading-6 font-medium text-gray-900">Quantidade de Vacas por Proprietário</h3>
                     <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
                         {owners.map((owner) => (
-                            <div key={owner.id} className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+                            <div key={owner._id} className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
                                 <dt className="text-sm font-medium text-gray-500 truncate">{owner.name}</dt>
-                                <dd className="mt-1 text-3xl font-semibold text-gray-900">{sumCows(cows.filter(el => el.ownerId === owner.id))}</dd>
+                                <dd className="mt-1 text-3xl font-semibold text-gray-900">{sumCows(cows.filter(el => el.ownerId === owner._id))}</dd>
                             </div>
                         ))}
                     </dl>

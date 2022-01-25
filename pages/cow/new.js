@@ -34,7 +34,7 @@ export default function New() {
         initialValues: {
             gender: 'female',
             birthMonth: '',
-            ownerId: owners ? owners[0]?.id : null,
+            ownerId: owners ? owners[0]?._id : null,
             name: '',
             quantity: 1
         },
@@ -105,7 +105,7 @@ export default function New() {
                                         aria-invalid={!!errors.ownerId}
                                     >
                                         {owners.map(owner => (
-                                            <option key={owner.id} value={owner.id}>{owner.name}</option>
+                                            <option key={owner._id} value={owner._id}>{owner.name}</option>
                                         ))}
                                     </select>
                                 </div>

@@ -108,7 +108,7 @@ export default function New() {
                                         value={values.ownerId}
                                     >
                                         {owners.map(owner => (
-                                            <option key={owner.id} value={owner.id}>{owner.name}</option>
+                                            <option key={owner._id} value={owner._id}>{owner.name}</option>
                                         ))}
                                     </select>
                                 </div>

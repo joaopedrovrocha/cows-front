@@ -5,8 +5,10 @@ import {PencilIcon, TagIcon, TrashIcon} from '@heroicons/react/solid'
 import Page from '../../components/page'
 import { useGetCows } from '../../hooks/useCow'
 
-import { getBirthMonth, getAge, getGender } from '../../helpers/cow.helper'
-import {useState} from "react";
+import { useGetOwners } from '../../hooks/useOwner'
+
+import { getAge, getGender } from '../../helpers/cow.helper'
+import {useState, useMemo} from "react";
 import {useSWRConfig} from "swr";
 import service from "../../lib/service";
 
@@ -14,10 +16,25 @@ export default function Index() {
     const router = useRouter()
 
     const { data: cows, isLoading, error } = useGetCows()
+    const { data: owners, isLoading: isLoadingOwners } = useGetOwners()
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDeleteWaiting, setIsDeleteWaiting] = useState(false)
     const [elementToDelete, setElementToDelete] = useState(null)
+    const [ownerSelected, setOwnerSelected] = useState('all')
+
+    const cowsFiltered = useMemo(() => {
+        if (ownerSelected === 'all') {
+            return cows
+        }
+
+        return cows.filter(cow => cow.owner._id === ownerSelected)
+
+    }, [cows, ownerSelected])
+
+    function onOwnerFilterChange(e) {
+        setOwnerSelected(e.target.value)
+    }
 
     const { mutate } = useSWRConfig()
 
@@ -30,13 +47,14 @@ export default function Index() {
         setIsDeleteWaiting(true)
 
         service
-            .delete(`/cows/${elementToDelete.id}`)
-            .then(response => {
+            .delete(`/cows/${elementToDelete._id}`)
+            .then(() => {
                 mutate('/cows')
 
                 setIsDeleting(false)
                 setElementToDelete(null)
                 setIsDeleteWaiting(false)
+                setOwnerSelected('all')
             })
     }
 
@@ -78,6 +96,13 @@ export default function Index() {
         )
     }
 
+    if (isLoading || isLoadingOwners) {
+        return <div></div>
+    }
+
+    let ownersForFilter = Object.values({ ...owners })
+    ownersForFilter.unshift({ _id: 'all', name: 'Todos' })
+
     return (
         <Page title="Vacas">
             <span className="relative z-0 inline-flex shadow-sm rounded-md">
@@ -90,7 +115,31 @@ export default function Index() {
               </button>
             </span>
 
-            <br clear="all" /><br clear="all" />
+            { !isLoadingOwners && (
+                <>
+                    <br clear="all" /><br clear="all" />
+
+                    <div>
+                        <label htmlFor="owner" className="block text-sm font-medium text-gray-700">
+                            Filtrar por Proprietário
+                        </label>
+
+                        <select
+                            id="owner"
+                            name="owner"
+                            className="mt-1 block w-2/5 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                            defaultValue="0"
+                            onChange={onOwnerFilterChange}
+                        >
+                            {ownersForFilter.map(owner => (
+                                <option key={owner._id} value={owner._id}>{ owner.name }</option>
+                            ))}
+                        </select>
+                    </div>
+                </>
+            ) }
+
+            <br clear="all" />
 
             <div className="flex flex-col">
                 <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -108,9 +157,6 @@ export default function Index() {
                                     <th width="15%" scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Gênero
                                     </th>
-                                    {/*<th scope="col" className="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">*/}
-                                    {/*    Mês de Nascimento*/}
-                                    {/*</th>*/}
                                     <th width="15%" scope="col" className="text-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Idade
                                     </th>
@@ -125,21 +171,20 @@ export default function Index() {
                                 <tbody>
                                 {isLoading && (
                                     <tr className={'bg-white'}>
-                                        <td colSpan={5} className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">Carregando..</td>
+                                        <td colSpan={6} className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">Carregando..</td>
                                     </tr>
                                 )}
 
-                                {!isLoading && !error && cows.map((cow, cowIdx) => (
-                                    <tr key={cow.id} className={cowIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                {!isLoading && !error && cowsFiltered.map((cow, cowIdx) => (
+                                    <tr key={cow._id} className={cowIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ cow.name }</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ cow.owner.name }</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ getGender(cow.gender) }</td>
-                                        {/*<td className="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ getBirthMonth(cow.birthMonth) }</td>*/}
                                         <td className="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ getAge(cow.birthMonth) }</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ cow.quantity || 1 }</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">{ cow.quantity || 1 }</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a
-                                                href={`/cow/${cow.id}`}
+                                                href={`/cow/${cow._id}`}
                                                 className="text-indigo-600 hover:text-indigo-900"
                                             > <PencilIcon className="inline-block h-5 w-5" aria-hidden="true" /> </a>
                                             <a

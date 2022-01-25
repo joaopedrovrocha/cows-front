@@ -28,7 +28,7 @@ export default function Index() {
         setIsDeleteWaiting(true)
 
         service
-            .delete(`/owners/${elementToDelete.id}`)
+            .delete(`/owners/${elementToDelete._id}`)
             .then(response => {
                 mutate('/owners')
 
@@ -116,11 +116,11 @@ export default function Index() {
                                 )}
 
                                 {!isLoading && !error && owners.map((owner, ownerIdx) => (
-                                    <tr key={owner.id} className={ownerIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                    <tr key={owner._id} className={ownerIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{owner.name}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a
-                                                href={`/owner/${owner.id}`}
+                                                href={`/owner/${owner._id}`}
                                                 className="text-indigo-600 hover:text-indigo-900"
                                             > <PencilIcon className="inline-block h-5 w-5" aria-hidden="true" /> </a>
                                             <a
